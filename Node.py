@@ -1,6 +1,7 @@
 from typing import Self
 
 from Grid import Grid
+from Score import Score
 
 
 class Node:
@@ -30,10 +31,26 @@ class Node:
     def Children(self) -> list[Self]:
         return self.__children
 
-    def generateChildren(self, playerSymbol: str, opponentSymbol: str) -> None:
-        possibleChoices = self.__grid.getPossibleChoices(playerSymbol)
+    def generateChildren(self, playerSymbol: str, opponentSymbol: str, playerTurn: bool) -> None:
+        if playerTurn:
+            symbol = playerSymbol
+        else:
+            symbol = opponentSymbol
+        possibleChoices = self.__grid.getPossibleChoices(symbol)
         for possibleChoice in possibleChoices:
             childGrid = Grid(self.__grid)
-            childGrid.setTileXY(possibleChoice[0], possibleChoice[1], playerSymbol)
+            childGrid.setTileXY(possibleChoice[0], possibleChoice[1], symbol)
             child = Node(childGrid)
             self.addChild(child)
+            child.generateChildren(playerSymbol, opponentSymbol, not playerTurn)
+
+    def __str__(self) -> str:
+        result = str(self.__grid)
+        if self.__grid.getScore("X", "O") == Score.WIN:
+            result += "X wins!\n"
+        if self.__grid.getScore("X", "O") == Score.LOOSE:
+            result += "X looses!\n"
+
+        for child in self.__children:
+            result += str(child)
+        return result
