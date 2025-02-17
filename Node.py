@@ -46,10 +46,13 @@ class Node:
 
     def __str__(self) -> str:
         result = str(self.__grid)
-        if self.__grid.getScore("X", "O") == Score.WIN:
+        score = self.__grid.getScore("X", "O")
+        if score == Score.WIN:
             result += "X wins!\n"
-        if self.__grid.getScore("X", "O") == Score.LOOSE:
+        if score == Score.LOOSE:
             result += "X looses!\n"
+        if score == Score.DRAW:
+            result += "DRAW!\n"
 
         for child in self.__children:
             result += str(child)
