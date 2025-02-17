@@ -62,8 +62,6 @@ class Grid:
         return True
 
     def getPossibleChoices(self, symbol: str) -> list[tuple[int, int]]:
-        if self.getScore(symbol, symbol) == Score.WIN:
-            return []
         winChoice = self.__getWinChoice(symbol)
         if winChoice is not None:
             return [winChoice]
